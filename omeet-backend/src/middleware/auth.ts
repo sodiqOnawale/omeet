@@ -26,7 +26,7 @@ export const authMiddleware = async ({ req }: { req: Request }): Promise<AuthCon
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
-    const user = await User.findById(decoded.id).select('-passsword');
+    const user = await User.findById(decoded.id).select('-password');
 
     return {
       user,

@@ -12,8 +12,8 @@ export const typeDefs = gql`
 		dateOfBirth: String!
 		gender: String!
 		bio: String
-		photos: [String]!
-		location: LOcation
+		photos: [String!]
+		location: Location
   }
 
 	type User {
@@ -22,15 +22,15 @@ export const typeDefs = gql`
     username: String!
     profile: Profile!
     createdAt: String!
-    updateAt: String!
+    updatedAt: String!
 	}
 
-  type AuthPayLoad {
+  type AuthPayload {
     token: String!
     user: User!
   }
     
-  input LocationInout {
+  input LocationInput {
     type: String!
     coordinates: [Float!]!
   }
@@ -40,7 +40,7 @@ export const typeDefs = gql`
     lastName: String!
     dateOfBirth: String!
     gender: String!
-    bio: String!
+    bio: String
     photos: [String!]
     location: LocationInput
   }
@@ -49,10 +49,10 @@ export const typeDefs = gql`
     email: String!
     password: String!
     username: String!
-    profile: ProfileInput
+    profile: ProfileInput!
   }
 
-  inputLoginInput {
+  input LoginInput {
     email: String!
     password: String!
   }
@@ -62,7 +62,7 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    register(input: RegisterInput): AuthPayLoad!
-    login(input: LoginInput!): AuthPayLoad!
+    register(input: RegisterInput!): AuthPayload!
+    login(input: LoginInput!): AuthPayload!
   }
 `;
