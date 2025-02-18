@@ -7,6 +7,7 @@ import { connectDB } from './config/db';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 import { authMiddleware } from './middleware/auth';
+import { graphqlUploadExpress } from 'graphql-upload-minimal'; // Ensure this is imported
 
 dotenv.config()
 
@@ -32,6 +33,7 @@ const startServer = async () => {
   //Applying middleware
   app.use(
     '/graphql',
+    graphqlUploadExpress(),
     json(),
     expressMiddleware(server, {
       context: authMiddleware

@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/user'
+import { uploadToS3 } from '../services/uploadService';
 
 const generateToken = (user: any) => {
   return jwt.sign(
@@ -69,6 +70,37 @@ export const userResolvers = {
         token,
         user
       }
-    }
+    },
+
+    uploadProfileImage: async (_: any, { file }: any, context: any) => {
+      if (!context.user) {
+        throw new Error('Not authenticated');
+      }
+ 
+      const { createReadStream, filename, mimetype } = await file;
+      const stream = createReadStream();
+ 
+      // Convert stream to buffer
+      const chunks = [];
+      for await (const chunk of stream) {
+        chunks.push(chunk);
+      }
+      const buffer = Buffer.concat(chunks);
+ 
+      // Upload to S3
+      const fileUrl = await uploadToS3({
+        buffer,
+        originalname: filename,
+        mimetype,
+      } as Express.Multer.File);
+ 
+      // Update user's profile photos
+      await User.findByIdAndUpdate(
+        context.user.id,
+        { $push: { 'profile.photos': fileUrl } }
+      );
+ 
+      return fileUrl;
+    },
   }
 }

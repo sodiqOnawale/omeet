@@ -61,8 +61,11 @@ export const typeDefs = gql`
     me: User!
   }
 
+  scalar Upload
+
   type Mutation {
     register(input: RegisterInput!): AuthPayload!
     login(input: LoginInput!): AuthPayload!
+    uploadProfileImage(file: Upload!): String!
   }
 `;
